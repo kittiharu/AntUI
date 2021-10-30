@@ -1,0 +1,62 @@
+<nz-page-header class="site-page-header" (nzBack)="onBack()" nzBackIcon nzTitle="Basic Form" nzSubtitle="Example"></nz-page-header>
+<nz-collapse>
+    <nz-collapse-panel nzHeader="Search Criteria" nzActive="true">
+        <form nz-form>
+            <div nz-row [nzGutter]="24">
+                <div nz-col [nzLg]="8" [nzMd]="8" [nzSm]="6" [nzXs]="24">
+                    <nz-form-item>
+                        <nz-form-label [nzLg]="8" [nzMd]="8" [nzSm]="8" [nzXs]="24">Name</nz-form-label>
+                        <nz-form-control [nzLg]="16" [nzMd]="16" [nzSm]="16" [nzXs]="24">
+                            <input nz-input placeholder="Name"/>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzLg]="8" [nzMd]="8" [nzSm]="6" [nzXs]="24">
+                    <nz-form-item>
+                        <nz-form-label nzRequired [nzLg]="8" [nzMd]="8" [nzSm]="8" [nzXs]="24">Creation Date</nz-form-label>
+                        <nz-form-control [nzLg]="16" [nzMd]="16" [nzSm]="16" [nzXs]="24">
+                            <nz-range-picker></nz-range-picker>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+                <div nz-col [nzLg]="8" [nzMd]="8" [nzSm]="6" [nzXs]="24">
+                    <nz-form-item>
+                        <nz-form-label [nzLg]="8" [nzMd]="8" [nzSm]="8" [nzXs]="24">Status</nz-form-label>
+                        <nz-form-control [nzLg]="16" [nzMd]="16" [nzSm]="16" [nzXs]="24">
+                            <nz-select nzAllowClear nzPlaceHolder="Select Status" ngModel="true">
+                                <nz-option nzLabel="Active" nzValue="true"></nz-option>
+                                <nz-option nzLabel="Inactive" nzValue="false"></nz-option>
+                              </nz-select>
+                        </nz-form-control>
+                    </nz-form-item>
+                </div>
+            </div>
+            <div nz-row [nzGutter]="24">
+                <div nz-col [nzSpan]="24" style="text-align: right;">
+                    <nz-space>
+                    <button nz-button *nzSpaceItem nzType="primary"><i nz-icon nzType="search"></i>Search</button>
+                    <button nz-button *nzSpaceItem nzType="default"><i nz-icon nzType="undo"></i>Clear</button>
+                    </nz-space>
+                </div>
+            </div>
+        </form>
+</nz-collapse-panel>
+</nz-collapse>
+
+<nz-table style="padding-top:24px" nzSize="small" nzShowPagination nzShowSizeChanger nzBordered
+ [nzData]="searchResult.data">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Creation Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let data of searchResult.data">
+            <td>{{ data.name }}</td>
+            <td>{{ data.creationDate }}</td>
+            <td>{{ data.status }}</td>
+          </tr>
+    </tbody>
+</nz-table>

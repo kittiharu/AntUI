@@ -1,1 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+.ant-form-item-label {
+    font-weight: 600;
+}
+
+/* .ant-collapse-header {
+    background-color: #096dd9;
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+    color: white;
+} */
+
+/* button {
+    margin-left: 8px;
+    margin-bottom: 8px;
+} */
