@@ -20,4 +20,16 @@
     padding: 24px;
     background: #fff;
     height: 100%
-  }
+}
+
+.ant-table > .ant-table-container > .ant-table-content > table > thead > tr > th {
+    text-align: center;
+    background: #096dd9;
+    color: white;
+    font-weight: 600;
+}
+
+.ant-table.ant-table-bordered > .ant-table-title {
+    border: 0px;
+    color: gray;
+}
