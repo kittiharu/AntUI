@@ -24,6 +24,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 import { BasicFormsComponent } from './basic-forms/basic-forms.component';
 import { LoginModule } from './login/login.module';
 
@@ -54,6 +55,7 @@ registerLocaleData(en);
     NzTableModule,
     NzDatePickerModule,
     NzAvatarModule,
+    NzDropDownModule,
     ReactiveFormsModule,
     LoginModule
   ],

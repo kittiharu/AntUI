@@ -26,9 +26,19 @@ export class BasicFormsComponent implements OnInit {
       }]
   }
 
+  showSearch = true
+  toggleLabel = 'Hide'
+
   ngOnInit(): void {
   }
 
   onBack(): void{}
+
+  // toggleCollapse(): void {
+  //   this.showSearch = !this.showSearch;
+  //   this.controlArray.forEach((c, index) => {
+  //     c.show = this.isCollapse ? index < 6 : true;
+  //   });
+  // }
 
 }

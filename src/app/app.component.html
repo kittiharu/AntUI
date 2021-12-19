@@ -47,19 +47,29 @@
 
         Demo Application</div>
         <div nz-col [nzSpan]="8" style="text-align: right;padding-right: 8px;">
-          <nz-space>
+          <!-- <nz-space>
           <nz-avatar *nzSpaceItem nzText="H" style="color:white; background-color:#1890ff;"></nz-avatar>
           <label *nzSpaceItem>Kitti Haru</label>
           <button *nzSpaceItem nz-button nzType="default" nzDanger (click)="logout()">Logout</button>
-          </nz-space>
+          </nz-space> -->
+          <button nz-button nz-dropdown [nzDropdownMenu]="menu" nzType="text" style="color:white;">
+            <i nz-icon nzType="user"></i>
+            Kitti Haru
+          </button>
+          <nz-dropdown-menu #menu="nzDropdownMenu">
+          <ul nz-menu nzSelectable>
+            
+            <li nz-menu-item style="color:red;"><i nz-icon nzType="logout"></i> <span>Logout</span></li>
+          </ul>
+          </nz-dropdown-menu>
         </div>
         </div>
       </div>
     </nz-header>
     <nz-content>
-      <div class="inner-content" style="padding:0px 12px 0px 12px;">
+      <!-- <div class="inner-content" style="padding:0px 12px 0px 12px;"> -->
         <router-outlet></router-outlet>
-      </div>
+      <!-- </div> -->
     </nz-content>
     <nz-footer>Ant Design ©2020 Implement By Angular</nz-footer>
   </nz-layout>
