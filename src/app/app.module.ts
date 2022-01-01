@@ -11,29 +11,15 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IconsProviderModule } from './icons-provider.module';
-import { NzLayoutModule } from 'ng-zorro-antd/layout';
-import { NzMenuModule } from 'ng-zorro-antd/menu';
-import { NzPageHeaderModule } from 'ng-zorro-antd/page-header';
-import { NzFormModule } from 'ng-zorro-antd/form';
-import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzGridModule } from 'ng-zorro-antd/grid';
-import { NzCollapseModule } from 'ng-zorro-antd/collapse';
-import { NzDatePickerModule } from 'ng-zorro-antd/date-picker';
-import { NzSelectModule } from 'ng-zorro-antd/select';
-import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzSpaceModule } from 'ng-zorro-antd/space';
-import { NzTableModule } from 'ng-zorro-antd/table';
-import { NzAvatarModule } from 'ng-zorro-antd/avatar';
-import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
-import { BasicFormsComponent } from './basic-forms/basic-forms.component';
-import { LoginModule } from './login/login.module';
+import { AuthorizationModule } from './features/authorization/authorization.module';
+import { SharedModule } from './shared/shared.module';
+//import { SampleModule } from './sample/sample.module';
 
 registerLocaleData(en);
 
 @NgModule({
   declarations: [
-    AppComponent,
-    BasicFormsComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -42,22 +28,9 @@ registerLocaleData(en);
     HttpClientModule,
     BrowserAnimationsModule,
     IconsProviderModule,
-    NzLayoutModule,
-    NzMenuModule,
-    NzPageHeaderModule,
-    NzFormModule,
-    NzInputModule,
-    NzGridModule,
-    NzCollapseModule,
-    NzSelectModule,
-    NzButtonModule,
-    NzSpaceModule,
-    NzTableModule,
-    NzDatePickerModule,
-    NzAvatarModule,
-    NzDropDownModule,
     ReactiveFormsModule,
-    LoginModule
+    AuthorizationModule,
+    SharedModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]
