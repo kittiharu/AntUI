@@ -15,11 +15,15 @@ import { NzSpaceModule } from 'ng-zorro-antd/space';
 import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzAvatarModule } from 'ng-zorro-antd/avatar';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import * as fromComponents from './components';
+
 @NgModule({
   declarations: [...fromComponents.components],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NzLayoutModule,
-    NzMenuModule,
+    NzMenuModule, NzNotificationModule,
     NzPageHeaderModule,
     NzFormModule,
     NzInputModule,
@@ -31,9 +35,9 @@ import * as fromComponents from './components';
     NzTableModule,
     NzDatePickerModule,
     NzAvatarModule,
-    NzDropDownModule],
+    NzDropDownModule, NzSpinModule, NzIconModule],
   exports: [FormsModule, ReactiveFormsModule, NzLayoutModule,
-    NzMenuModule,
+    NzMenuModule, NzNotificationModule,
     NzPageHeaderModule,
     NzFormModule,
     NzInputModule,
@@ -45,6 +49,6 @@ import * as fromComponents from './components';
     NzTableModule,
     NzDatePickerModule,
     NzAvatarModule,
-    NzDropDownModule, ...fromComponents.components]
+    NzDropDownModule, NzSpinModule, NzIconModule, ...fromComponents.components]
 })
 export class SharedModule {}

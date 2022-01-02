@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MessageService } from '@core/services';
 
 @Component({
   selector: 'app-basic-forms',
@@ -7,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BasicFormsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private messageService: MessageService) { }
 
   searchResult: any = {
     data: [
@@ -33,6 +34,10 @@ export class BasicFormsComponent implements OnInit {
   }
 
   onBack(): void{}
+
+  onSearch(): void {
+    this.messageService.success('Search Successfully', 'This is content');
+  }
 
   // toggleCollapse(): void {
   //   this.showSearch = !this.showSearch;

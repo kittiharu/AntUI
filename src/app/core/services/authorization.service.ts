@@ -1,93 +1,31 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { ReplaySubject, Observable, of, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Injectable }       from '@angular/core';
 import { Router } from '@angular/router';
-import { Token } from '@core/models/token'
-//import { LoadingService } from '../loading/loading.service'
-//import { environment } from '../../../../environments/environment';
-//import { MessageService } from 'primeng/components/common/messageservice';
-//import { LoginEventService } from '../../../service/login.event.service';
+import { Token } from '@core/models';
+import { LoadingService, MessageService } from '@core/services';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthorizationService {
-    user: any;
-    permissions: any;
-    userPermissions = new ReplaySubject(1);
-    authorizationTable = new ReplaySubject(1);
-
-    loginUrl = '/authenApi/token'; 
-    reloginUrl = '/authenApi/token';
+    loginSubject = new Subject<boolean>();
+    loginUrl = '/authenapi/token'; 
+    reloginUrl = '/authenapi/token';
     loginPage = '/login';
     tokenName = 'token';
     defaultExpire = 30 * 60;
     redirectUrlName = 'redirectUrl';
     defaultRedirectUrl = '/home';
-    loginStatus = false;
     storage = localStorage;
     result = new Subject();
 
     constructor(
             private httpClient: HttpClient,
             private router: Router,
-            //private loadingService: LoadingService,
-            //private messageService: MessageService,
-            //private loginEventService: LoginEventService
-            ) {
-        // this.store.select('currentUser').pipe(
-        //     filter(val=>val != undefined && val != null)
-        // ).subscribe((data: ICurrentUser) => {
-        //     if (data.user) {
-        //         this.user = data.user;
-        //         this.permissions = data.permissions;
-        //         console.log("User permission");
-        //         console.log(this.permissions);
-        //         this.userPermissions.next(this.permissions);
-        //         this.httpClient.get('model/authorization.json').subscribe(res=>{
-        //             this.authorizationTable.next(res);
-        //         });
-        //     }
-        // });
-    }
-
-    hasAuthorizeForPath(path: String): Observable<boolean> {
-        console.log("Path " + path);
-        return Observable.create(obs => {
-            this.authorizationTable.subscribe((value: any) => {
-                let authorize = value.filter(it => it.type === "path" && path.includes(it.action));
-                if (authorize.length == 0) {
-                    console.log("Check user for permission on: " + path, true);
-                    obs.next(true);
-                    return;
-                }
-                this.userPermissions.subscribe((userPermissins: any) => {
-                    if (authorize.some(it => userPermissins.includes(it.require))) {
-                        console.log("Check user for permission on: " + path, true);
-                        obs.next(true);
-                        return;
-                    }
-                    console.log("Check user for permission on: " + path, false);
-                    obs.next(false);
-                });
-            })
-        });
-    }
-
-    hasAuthorizeForPermission(permission: String): Observable<boolean> { 
-        if (!permission) {
-            console.log("Check user for permission on: " + permission, true);
-            return of(true);
-        }
-
-        return Observable.create(obs => {
-            this.userPermissions.subscribe((userPermissins: any) => {
-                let per = userPermissins.some(p=> p.startsWith(permission))
-                console.log("Check user for permission on: " + permission, per);
-                obs.next(per);
-            });
-        });
-    }
+            private loadingService: LoadingService,
+            private messageService: MessageService,
+            ) {}
 
     getToken(): any {
         if (this.storage[this.tokenName])
@@ -121,8 +59,8 @@ export class AuthorizationService {
         this.router.navigate([this.loginPage]);
     }
 
-    login(username: string, password: string, domain: string): Subject<any> {
-        //this.loadingService.trigger(true);
+    login(username: string, password: string, domain: string = ''): Subject<any> {
+        this.loadingService.trigger(true);
         let data = {
             grant_type: 'password',
             username: encodeURIComponent(username),
@@ -135,31 +73,19 @@ export class AuthorizationService {
         this.httpClient.post<Token>(this.loginUrl, Object.keys(data).map(key=>key+"="+data[key]).join("&"), {headers})
         .subscribe(
             (data) => {
-                //Add by pat.partithammatorn 23/09/2019
-                if(JSON.parse(localStorage.getItem('userInfoSSO')) != null)
-                    this.clearStorage();
-                //End add by pat.partithammatorn 23/09/2019
-
                 this.saveToken(data);
-                //this.loginEventService.isLogin(true);
+                this.isLogin(true);
                 this.result.next(data);
             },
             (err) => {
-                let errorMessage = {severity:'error', summary:'Error', detail: 'Error occured, Please contact administrator.'};
-                try {
-                    if (err.error && err.error.error_description){
-                        errorMessage.detail = err.error.error_description;
-                    }
-                }catch(e) {
-
-                }
-                //this.loadingService.trigger(false);
-                //this.messageService.add(errorMessage);
-                this.result.next(false);
+                this.loadingService.trigger(false);
+                this.messageService.error('Error', 'Error occured, Please contact administrator.');
+                return this.result.next(false);
             },
             () => {
-                //this.loadingService.trigger(false);
+                this.loadingService.trigger(false);
             });
+
         return this.result;
     }
 
@@ -189,7 +115,7 @@ export class AuthorizationService {
 
     logout(): void {
         this.clearStorage();
-        //this.loginEventService.isLogin(false);
+        this.isLogin(false);
         this.forwardToLogin('');
     }
 
@@ -198,7 +124,7 @@ export class AuthorizationService {
         if (!token) {
             console.log('Relogin: not found token');
             this.logout();
-            //this.loginEventService.isLogin(false);
+            this.isLogin(false);
             return;
         }
         let data = 'scope=offline_access&grant_type=refresh_token&refresh_token=' + token['refresh'];
@@ -211,11 +137,15 @@ export class AuthorizationService {
         .subscribe(
             (res) => {
                 this.saveToken(res);
-                //this.loginEventService.isLogin(true);
+                this.isLogin(true);
             },
             (err) => {
                 this.logout();
-                //his.loginEventService.isLogin(false);
+                this.isLogin(false);
             });
+    }
+
+    isLogin(value: boolean) {
+        this.loginSubject.next(value);
     }
 }

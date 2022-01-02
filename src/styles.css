@@ -33,3 +33,7 @@
     border: 0px;
     color: gray;
 }
+
+.ant-spin-nested-loading > div > .ant-spin-lg.ant-spin-show-text .ant-spin-dot {
+    margin-left: 0px;
+}
