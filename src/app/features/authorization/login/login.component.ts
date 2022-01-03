@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthorizationService } from '@core/services';
 import { Router} from '@angular/router';
-import { Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
+import { LoadingService, MessageService } from '@core/services';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +23,9 @@ export class LoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
     private authService: AuthorizationService,
-    private router: Router) {}
+    private router: Router,
+    private loadingService: LoadingService,
+    private messageService: MessageService) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -35,29 +36,35 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    //this.messageService.clear();
+    this.messageService.clear();
     let formValue = this.form.value;
     let domainValue = '';
-    let username = formValue.username;
-    if (formValue && formValue.username && formValue.password) {
+    let username = formValue.userName;
+    if (formValue && formValue.userName && formValue.password) {
       // if (formValue.domain != 'external') {
       //   domainValue = formValue.domain;
       //   username += '@' + domainValue + '.co.th';
       // }
-      //this.loadingService.trigger(true);
+      this.loadingService.trigger(true);
       this.authService.login(username, formValue.password, domainValue)
-        .subscribe(result => {
-          if (result) {
-            //this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Login Success' });
-            //setTimeout(() => { this.app.schedulingNotification(); }, 1000);
+        .subscribe(token => {
+          if (token) {
+            this.messageService.success('Login Success');
             this.router.navigate([this.authService.getRedirectUrl()]);
-          }
-          //this.loadingService.trigger(false);
+          } 
+          this.loadingService.trigger(false);
         }, err => {
-          //this.loadingService.trigger(false);
+          if (err.error && err.error.error_description){
+            this.messageService.error('Login Fail', err.error.error_description);
+          } else {
+            this.messageService.error('Login Fail', 'Please contact system administrator');
+          }
+          this.loadingService.trigger(false);
+        }, () => {
+          this.loadingService.trigger(false);
         });
     } else {
-      //this.messageService.add({ severity: 'error', summary: 'Fail', detail: 'Login Fail' });
+      this.messageService.error('Error', 'Require username and password');
     }
   }
 }

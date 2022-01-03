@@ -44,6 +44,7 @@ export class MessageService {
 
     clear(id = this.defaultId) {
         //this.subject.next(new Message({ id }));
+        this.notification.remove(id);
     }
 
     success(title: string, content = '', autoClose = true) {

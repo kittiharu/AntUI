@@ -1,0 +1,12 @@
+{
+    "/api-auth": {
+      "target": "http://localhost/sampleauthserver",
+      "secure": false,
+      "pathRewrite": { "^/api-auth": ""}
+    },
+    "/api-resource1": {
+      "target": "http://localhost/SampleResourceServer1",
+      "secure": false,
+      "pathRewrite": { "^/api-resource1": ""}
+    }
+  }

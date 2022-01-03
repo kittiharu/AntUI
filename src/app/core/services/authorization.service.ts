@@ -3,28 +3,25 @@ import { Observable, Subject } from 'rxjs';
 import { Injectable }       from '@angular/core';
 import { Router } from '@angular/router';
 import { Token } from '@core/models';
-import { LoadingService, MessageService } from '@core/services';
+import { map } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthorizationService {
     loginSubject = new Subject<boolean>();
-    loginUrl = '/authenapi/token'; 
-    reloginUrl = '/authenapi/token';
+    loginUrl = '/api-auth/connect/token'; 
+    reloginUrl = '/api-auth/connect/token';
     loginPage = '/login';
     tokenName = 'token';
     defaultExpire = 30 * 60;
     redirectUrlName = 'redirectUrl';
-    defaultRedirectUrl = '/home';
+    defaultRedirectUrl = '/sample';
     storage = localStorage;
-    result = new Subject();
 
     constructor(
             private httpClient: HttpClient,
             private router: Router,
-            private loadingService: LoadingService,
-            private messageService: MessageService,
             ) {}
 
     getToken(): any {
@@ -59,8 +56,7 @@ export class AuthorizationService {
         this.router.navigate([this.loginPage]);
     }
 
-    login(username: string, password: string, domain: string = ''): Subject<any> {
-        this.loadingService.trigger(true);
+    login(username: string, password: string, domain: string = ''): Observable<Token> {
         let data = {
             grant_type: 'password',
             username: encodeURIComponent(username),
@@ -70,23 +66,14 @@ export class AuthorizationService {
             //client_secret: ''   //TODO
         };
         const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
-        this.httpClient.post<Token>(this.loginUrl, Object.keys(data).map(key=>key+"="+data[key]).join("&"), {headers})
-        .subscribe(
-            (data) => {
-                this.saveToken(data);
+        return this.httpClient.post<Token>(this.loginUrl, Object.keys(data).map(key=>key+"="+data[key]).join("&"), {headers})
+        .pipe(
+            map(token => {
+                this.saveToken(token);
                 this.isLogin(true);
-                this.result.next(data);
-            },
-            (err) => {
-                this.loadingService.trigger(false);
-                this.messageService.error('Error', 'Error occured, Please contact administrator.');
-                return this.result.next(false);
-            },
-            () => {
-                this.loadingService.trigger(false);
-            });
-
-        return this.result;
+                return token;
+            })
+        );
     }
 
     saveToken(obj: any): void {

@@ -1,7 +1,0 @@
-{
-    "/authenapi": {
-      "target": "http://localhost/sampleauthserver",
-      "pathRewrite": { "^/authenapi": ''},
-      "secure": false
-    }
-  }

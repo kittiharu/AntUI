@@ -9,7 +9,7 @@ import { AuthorizationService } from '@core/services';
 })
 export class AppComponent implements OnInit {
   isCollapsed = false;
-  isLogin = true;
+  isLogin = false;
 
   constructor(
     private router: Router,
@@ -20,9 +20,12 @@ export class AppComponent implements OnInit {
       this.authService.loginSubject.asObservable().subscribe(value => {
         this.isLogin = value;
       });
+      if (this.authService.isLoggedIn()) {
+        this.isLogin = true;
+      }
   }
 
   logout(){
-    this.router.navigate(['/login']);
+    this.authService.logout();
   }
 }
