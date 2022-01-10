@@ -1,5 +1,5 @@
-<nz-layout class="app-layout" *ngIf="isLogin">
-  <nz-sider class="menu-sidebar"
+<nz-layout class="app-layout">
+  <nz-sider class="menu-sidebar" *ngIf="isLogin"
             nzCollapsible
             nzWidth="256px"
             nzBreakpoint="md"
@@ -17,25 +17,19 @@
           <li nz-menu-item nzMatchRouter>
             <a routerLink="/welcome">Welcome</a>
           </li>
-          <li nz-menu-item nzMatchRouter>
-            <a>Monitor</a>
-          </li>
-          <li nz-menu-item nzMatchRouter>
-            <a>Workplace</a>
-          </li>
         </ul>
       </li>
       <li nz-submenu nzOpen nzTitle="Form" nzIcon="form">
         <ul>
           <li nz-menu-item nzMatchRouter>
-            <a routerLink="/basic-forms">Basic Form</a>
+            <a routerLink="/sample/basic-forms">Basic Form</a>
           </li>
         </ul>
       </li>
     </ul>
   </nz-sider>
   <nz-layout>
-    <nz-header>
+    <nz-header *ngIf="isLogin">
       <div class="app-header">
         <div style="height: 64px;" nz-row>
         <div nz-col [nzSpan]="16" style="height: 64px;font-size: large;font-weight:bold;"><span class="header-trigger" (click)="isCollapsed = !isCollapsed">
@@ -66,18 +60,18 @@
         </div>
       </div>
     </nz-header>
-    <nz-content>
+    <nz-content style="margin: 0px">
       <!-- <div class="inner-content" style="padding:0px 12px 0px 12px;"> -->
         <router-outlet></router-outlet>
       <!-- </div> -->
     </nz-content>
-    <nz-footer>Ant Design ©2020 Implement By Angular</nz-footer>
+    <nz-footer *ngIf="isLogin">Ant Design ©2020 Implement By Angular</nz-footer>
   </nz-layout>
 </nz-layout>
 
-<div nz-row *ngIf="!isLogin" style="width:100%">
+<!-- <div nz-row *ngIf="!isLogin" style="width:100%">
   <div nz-col [nzXs]="0" [nzSm]="0" [nzMd]="16" [nzLg]="16" style="background-image: url('assets/image/logistics-bg.jpg');background-size:cover;"></div>
   <div nz-col [nzXs]="24" [nzSm]="0" [nzMd]="8" [nzLg]="8" ><router-outlet></router-outlet></div>
-</div>
+</div> -->
 
 <loading></loading>

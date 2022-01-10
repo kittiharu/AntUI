@@ -4,6 +4,7 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot
 }                           from '@angular/router';
+import { AppConstants } from '@core/app.constants';
 import { AuthorizationService } from '../services/authorization.service';
 
 @Injectable({
@@ -18,15 +19,16 @@ export class AuthGuard implements CanActivate {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     let url: string = state.url;
     if (this.authorizationService.isLoggedIn()) {
-      if (url == '/login') {
-        this.router.navigate(['/sample']);
+      console.log('logined');
+      if (url == AppConstants.LOGIN_PATH) {
+        this.router.navigate(['/']);
         return false;
       }
       return true;
     } else {
-      if (url == '/login' || url == '/token') return true;
+      if (url == AppConstants.LOGIN_PATH) return true;
       this.authorizationService.isLogin(false);
-      this.authorizationService.forwardToLogin(url);
+      this.router.navigate([AppConstants.LOGIN_PATH], { queryParams: { returnUrl: state.url }});
       return false;
     }
   }

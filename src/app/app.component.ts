@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AppConstants } from '@core/app.constants';
 import { AuthorizationService } from '@core/services';
 
 @Component({
@@ -27,5 +28,6 @@ export class AppComponent implements OnInit {
 
   logout(){
     this.authService.logout();
+    this.router.navigate([AppConstants.LOGIN_PATH]);
   }
 }

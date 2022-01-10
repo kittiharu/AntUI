@@ -33,6 +33,7 @@ export class BasicFormsComponent implements OnInit {
   toggleLabel = 'Hide'
 
   ngOnInit(): void {
+    console.log('Basic Forms OnInit');
   }
 
   onBack(): void{}

@@ -19,10 +19,11 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzNotificationModule } from 'ng-zorro-antd/notification';
 import * as fromComponents from './components';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [...fromComponents.components],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NzLayoutModule,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule, NzLayoutModule,
     NzMenuModule, NzNotificationModule,
     NzPageHeaderModule,
     NzFormModule,
@@ -36,7 +37,7 @@ import * as fromComponents from './components';
     NzDatePickerModule,
     NzAvatarModule,
     NzDropDownModule, NzSpinModule, NzIconModule],
-  exports: [FormsModule, ReactiveFormsModule, NzLayoutModule,
+  exports: [FormsModule, ReactiveFormsModule, HttpClientModule, NzLayoutModule,
     NzMenuModule, NzNotificationModule,
     NzPageHeaderModule,
     NzFormModule,

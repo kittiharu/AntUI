@@ -7,35 +7,32 @@ import { NZ_I18N } from 'ng-zorro-antd/i18n';
 import { en_US } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { IconsProviderModule } from './icons-provider.module';
-import { AuthorizationModule } from './features/authorization/authorization.module';
 import { SharedModule } from './shared/shared.module';
 import { AuthInterceptor } from '@core/helpers/auth.interceptor';
-//import { SampleModule } from './sample/sample.module';
+import { ErrorHandlingInterceptor } from '@core/helpers/error.handling.interceptor';
+import { LoginComponent } from './features/login/login.component';
+import { WelcomeComponent } from './features/welcome/welcome.component';
 
 registerLocaleData(en);
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent, LoginComponent, WelcomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
     BrowserAnimationsModule,
     IconsProviderModule,
-    ReactiveFormsModule,
-    AuthorizationModule,
     SharedModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorHandlingInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })

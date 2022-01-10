@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthorizationService } from '@core/services';
-import { Router} from '@angular/router';
+import { Router, ActivatedRoute} from '@angular/router';
 import { LoadingService, MessageService } from '@core/services';
 
 @Component({
@@ -11,6 +11,7 @@ import { LoadingService, MessageService } from '@core/services';
 })
 export class LoginComponent implements OnInit {
   form!: FormGroup;
+  returnUrl: string;
 
   submitForm(): void {
     for (const i in this.form.controls) {
@@ -25,7 +26,8 @@ export class LoginComponent implements OnInit {
     private authService: AuthorizationService,
     private router: Router,
     private loadingService: LoadingService,
-    private messageService: MessageService) {}
+    private messageService: MessageService,
+    private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -33,6 +35,8 @@ export class LoginComponent implements OnInit {
       password: [null, [Validators.required]],
       //remember: [true]
     });
+
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   login(): void {
@@ -50,17 +54,8 @@ export class LoginComponent implements OnInit {
         .subscribe(token => {
           if (token) {
             this.messageService.success('Login Success');
-            this.router.navigate([this.authService.getRedirectUrl()]);
+            this.router.navigate([this.returnUrl]);
           } 
-          this.loadingService.trigger(false);
-        }, err => {
-          if (err.error && err.error.error_description){
-            this.messageService.error('Login Fail', err.error.error_description);
-          } else {
-            this.messageService.error('Login Fail', 'Please contact system administrator');
-          }
-          this.loadingService.trigger(false);
-        }, () => {
           this.loadingService.trigger(false);
         });
     } else {
